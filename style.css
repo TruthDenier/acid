@@ -2,6 +2,25 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+}
+
+/* Prevent text selection on mobile */
+body {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    -webkit-touch-callout: none;
+    -webkit-overflow-scrolling: touch;
+}
+
+/* Prevent zoom on inputs and buttons on iOS */
+input,
+button,
+textarea,
+select {
+    font-size: 16px;
 }
 
 body {
@@ -33,6 +52,26 @@ body {
     animation: floatUp 8s linear infinite;
     user-select: none;
     color: rgba(255, 105, 180, 0.4);
+    will-change: transform, opacity;
+}
+
+.falling-cat {
+    position: absolute;
+    font-size: 30px;
+    animation: fallDown 6s linear infinite;
+    user-select: none;
+    will-change: transform, opacity;
+}
+
+@keyframes fallDown {
+    0% {
+        transform: translateY(-50px) rotate(0deg);
+        opacity: 0.8;
+    }
+    100% {
+        transform: translateY(100vh) rotate(360deg);
+        opacity: 0;
+    }
 }
 @keyframes floatUp {
     0% {
@@ -118,10 +157,10 @@ body {
     }
 }
 
-.title { 
+.title {
     font-size: 52px;
     background: linear-gradient(45deg, #d53f8c, #fbb6ce, #ff69b4);
-    -webkit-background-clip: text;  
+    -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     display: inline-block;
     position: relative;
@@ -437,23 +476,352 @@ body {
     margin-top: 15px;
 }
 
+/* ========== Mobile Optimization ========== */
 @media (max-width: 600px) {
+    body {
+        padding: 10px;
+        min-height: 100vh;
+    }
+
     .card {
-        padding: 20px 15px;
+        padding: 20px 12px;
+        padding-bottom: 80px;
+        border-radius: 30px 30px 20px 20px;
+        box-shadow:
+            0 10px 30px rgba(0, 0, 0, 0.3),
+            0 0 0 2px rgba(255, 255, 255, 0.5);
     }
+
+    .avatar {
+        width: 80px;
+        height: 80px;
+        margin-bottom: 15px;
+        border-width: 3px;
+    }
+
+    .avatar-heart {
+        font-size: 40px;
+    }
+
     .title {
-        font-size: 36px;
+        font-size: 32px;
+        margin-bottom: 8px;
     }
+
+    .title-heart {
+        font-size: 28px;
+        margin-left: 5px;
+    }
+
+    .subtitle {
+        font-size: 14px;
+        padding: 6px 14px;
+    }
+
+    .time-together {
+        font-size: 18px;
+        margin-bottom: 15px;
+    }
+
     .compliments-grid {
         grid-template-columns: 1fr;
+        gap: 10px;
+        margin-bottom: 15px;
     }
+
+    .compliment-card {
+        padding: 12px 10px;
+        font-size: 14px;
+        border-radius: 20px;
+    }
+
+    .compliment-icon {
+        font-size: 24px;
+        margin-bottom: 3px;
+    }
+
+    .button-container {
+        flex-direction: column;
+        gap: 10px;
+        margin-bottom: 10px;
+    }
+
     .magic-button,
     .secret-button,
     .kiss-button {
+        width: 100%;
         font-size: 14px;
-        padding: 12px 18px;
+        padding: 14px 20px;
+        min-height: 48px;
+        touch-action: manipulation;
     }
+
+    .magic-button span,
+    .secret-button span,
+    .kiss-button span {
+        font-size: 16px;
+    }
+
+    .love-letter-section {
+        margin-bottom: 10px;
+    }
+
+    .kiss-counter {
+        position: fixed;
+        bottom: env(safe-area-inset-bottom, 0px);
+        right: 0;
+        left: 0;
+        margin: 0;
+        width: 100%;
+        padding: 16px 20px;
+        font-size: 16px;
+        border: none;
+        border-radius: 0;
+        text-align: center;
+        justify-content: center;
+        background: rgba(255, 105, 180, 0.15);
+        color: #d53f8c;
+        box-shadow: none;
+        animation: none;
+    }
+
+    .modal-content {
+        padding: 25px 15px;
+        border-radius: 20px;
+    }
+
+    .modal-close {
+        top: 10px;
+        right: 15px;
+        font-size: 28px;
+    }
+
+    .letter-icon {
+        font-size: 40px;
+    }
+
+    .letter-title {
+        font-size: 22px;
+    }
+
+    .letter-text {
+        font-size: 16px;
+        min-height: 100px;
+    }
+
+    .letter-sign {
+        font-size: 14px;
+    }
+
+    /* Pop-up text mobile */
+    .pop-up-text.active {
+        width: 90%;
+        max-width: 300px;
+    }
+
+    .pop-up-text p {
+        font-size: 16px !important;
+    }
+}
+
+/* Extra small screens (iPhone SE, older devices) */
+@media (max-width: 360px) {
+    .card {
+        padding: 15px 10px;
+        padding-bottom: 70px;
+    }
+
+    .title {
+        font-size: 26px;
+    }
+
+    .avatar {
+        width: 65px;
+        height: 65px;
+    }
+
+    .avatar-heart {
+        font-size: 32px;
+    }
+
+    .subtitle {
+        font-size: 12px;
+    }
+
+    .compliment-card {
+        padding: 10px 8px;
+        font-size: 13px;
+    }
+
+    .magic-button,
+    .secret-button,
+    .kiss-button {
+        font-size: 12px;
+        padding: 12px 15px;
+    }
+
+    .kiss-counter {
+        position: fixed;
+        bottom: env(safe-area-inset-bottom, 0px);
+        right: 0;
+        left: 0;
+        margin: 0;
+        width: 100%;
+        padding: 14px 14px;
+        font-size: 14px;
+        border: none;
+        border-radius: 0;
+        text-align: center;
+        background: rgba(255, 105, 180, 0.15);
+        color: #d53f8c;
+        box-shadow: none;
+        animation: none;
+    }
+}
+
+/* Touch device optimizations */
+@media (hover: none) and (pointer: coarse) {
+    .card:hover {
+        transform: none;
+    }
+
+    .compliment-card:hover {
+        transform: none;
+    }
+
+    .magic-button:hover,
+    .secret-button:hover,
+    .kiss-button:hover {
+        transform: scale(1.02);
+    }
+
+    .modal-close:hover {
+        transform: none;
+    }
+
+    /* Larger touch targets */
+    .magic-button,
+    .secret-button,
+    .kiss-button,
+    .modal-close {
+        min-height: 44px;
+        min-width: 44px;
+    }
+}
+
+/* Reduced motion for accessibility */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+
+    .heart,
+    .falling-cat {
+        animation: none;
+        opacity: 0.3;
+    }
+}
+
+/* Landscape orientation adjustments */
+@media (max-height: 500px) and (orientation: landscape) {
+    .card {
+        padding: 15px;
+        padding-bottom: 50px;
+        max-height: 95vh;
+        overflow-y: auto;
+    }
+
+    .avatar {
+        width: 50px;
+        height: 50px;
+        margin-bottom: 10px;
+    }
+
+    .avatar-heart {
+        font-size: 28px;
+    }
+
+    .title {
+        font-size: 24px;
+    }
+
+    .title-heart {
+        font-size: 20px;
+    }
+
+    .subtitle {
+        font-size: 12px;
+        margin-bottom: 8px;
+    }
+
+    .time-together {
+        font-size: 14px;
+        margin-bottom: 10px;
+    }
+
+    .compliments-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 8px;
+    }
+
+    .compliment-card {
+        padding: 8px;
+        font-size: 12px;
+    }
+
+    .compliment-icon {
+        font-size: 20px;
+    }
+
     .button-container {
-        flex-direction: column;
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+
+    .magic-button,
+    .secret-button,
+    .kiss-button {
+        font-size: 11px;
+        padding: 8px 12px;
+    }
+
+    .kiss-counter {
+        position: fixed;
+        bottom: env(safe-area-inset-bottom, 0px);
+        right: 0;
+        left: 0;
+        margin: 0;
+        width: 100%;
+        padding: 10px 12px;
+        font-size: 13px;
+        border: none;
+        border-radius: 0;
+        text-align: center;
+        background: rgba(255, 105, 180, 0.15);
+        color: #d53f8c;
+        box-shadow: none;
+        animation: none;
+    }
+}
+
+/* High DPI displays */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+    .card {
+        border-width: 1px;
+    }
+
+    .avatar {
+        border-width: 3px;
+    }
+
+    .magic-button,
+    .secret-button,
+    .kiss-button {
+        border-width: 2px;
     }
 }

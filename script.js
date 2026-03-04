@@ -14,7 +14,6 @@ const compliments = [
         icon: "🌸",
     },
     { text: "Твоя улыбка способна растопить самый холодный лёд.", icon: "😊" },
-  
 ];
 
 const additionalCompliments = [
@@ -68,26 +67,39 @@ const colors = [
     "#00FFFF",
 ];
 
+// Detect mobile device
+const isMobile =
+    /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+        navigator.userAgent,
+    ) || window.innerWidth < 768;
+
 const ANIMATION_DURATIONS = {
-    heartFloat: { min: 6, max: 12 },
-    catFall: { min: 4, max: 8 },
-    glitterExplosion: 1200,
+    heartFloat: { min: isMobile ? 8 : 6, max: isMobile ? 15 : 12 },
+    catFall: { min: isMobile ? 6 : 4, max: isMobile ? 10 : 8 },
+    glitterExplosion: isMobile ? 800 : 1200,
     magicRings: 1000,
     messageDisplay: 3500,
-    heartRain: { min: 4, max: 7 },
+    heartRain: { min: isMobile ? 6 : 4, max: isMobile ? 10 : 7 },
     cardClickScale: 400,
     buttonBgChange: 2000,
     complimentHide: 400,
     fireworkFly: 1500,
     fireworkExplosion: 800,
 };
+
 const ANIMATION_DELAYS = {
-    heartFloat: 250,
-    catFall: 150,
-    sparkleCreation: 20,
+    heartFloat: isMobile ? 500 : 250,
+    catFall: isMobile ? 300 : 150,
+    sparkleCreation: isMobile ? 30 : 20,
     magicRingCreation: 100,
-    heartSpawn: 150,
+    heartSpawn: isMobile ? 300 : 150,
 };
+
+// Reduce elements on mobile for performance
+const MAX_FLOATING_HEARTS = isMobile ? 8 : 15;
+const MAX_FALLING_CATS = isMobile ? 3 : 8;
+const GLITTER_COUNT = isMobile ? 15 : 30;
+const HEART_RAIN_COUNT = isMobile ? 3 : 5;
 
 let heartRainInterval;
 let floatingHeartInterval;
@@ -137,8 +149,14 @@ function ensureContainers() {
 }
 
 function createFloatingHeart() {
+    // Limit hearts on mobile
     const heartsContainer = document.getElementById("floatingHearts");
     if (!heartsContainer) return;
+
+    // Check current heart count
+    const currentHearts = heartsContainer.children.length;
+    if (currentHearts >= MAX_FLOATING_HEARTS) return;
+
     const heart = document.createElement("div");
     heart.classList.add("heart");
     const heartSymbols = [
@@ -160,13 +178,20 @@ function createFloatingHeart() {
     heart.textContent =
         heartSymbols[Math.floor(Math.random() * heartSymbols.length)];
     heart.style.left = Math.random() * 100 + "%";
-    heart.style.fontSize = Math.random() * 25 + 15 + "px";
+    heart.style.fontSize = isMobile
+        ? Math.random() * 15 + 12 + "px"
+        : Math.random() * 25 + 15 + "px";
     heart.style.animationDuration =
         Math.random() *
             (ANIMATION_DURATIONS.heartFloat.max -
                 ANIMATION_DURATIONS.heartFloat.min) +
         ANIMATION_DURATIONS.heartFloat.min +
         "s";
+    // GPU acceleration for mobile
+    if (isMobile) {
+        heart.style.willChange = "transform, opacity";
+        heart.style.transform = "translateZ(0)";
+    }
     heartsContainer.appendChild(heart);
     setTimeout(() => {
         heart.remove();
@@ -174,20 +199,31 @@ function createFloatingHeart() {
 }
 
 function createFallingCat() {
+    // Limit cats on mobile
     const catsContainer = document.getElementById("catsContainer");
     if (!catsContainer) return;
+
+    const currentCats = catsContainer.children.length;
+    if (currentCats >= MAX_FALLING_CATS) return;
+
     const cat = document.createElement("div");
     cat.classList.add("falling-cat");
     const catSymbols = ["🐱", "😺", "😸", "😹", "😻", "🐈", "🐾"];
     cat.textContent = catSymbols[Math.floor(Math.random() * catSymbols.length)];
     cat.style.left = Math.random() * 100 + "%";
-    cat.style.fontSize = Math.random() * 25 + 20 + "px";
+    cat.style.fontSize = isMobile
+        ? Math.random() * 15 + 18 + "px"
+        : Math.random() * 25 + 20 + "px";
     cat.style.animationDuration =
         Math.random() *
             (ANIMATION_DURATIONS.catFall.max -
                 ANIMATION_DURATIONS.catFall.min) +
         ANIMATION_DURATIONS.catFall.min +
         "s";
+    if (isMobile) {
+        cat.style.willChange = "transform, opacity";
+        cat.style.transform = "translateZ(0)";
+    }
     catsContainer.appendChild(cat);
     setTimeout(() => {
         cat.remove();
@@ -196,53 +232,60 @@ function createFallingCat() {
 
 function createHeartRain() {
     if (heartRainInterval) clearInterval(heartRainInterval);
+    const interval = isMobile ? 3000 : 2000;
     heartRainInterval = setInterval(() => {
-        if (Math.random() > 0.8) {
-            for (let i = 0; i < 5; i++) {
-                setTimeout(() => {
-                    const heart = document.createElement("div");
-                    heart.innerHTML = ["❤️", "💖", "💕", "💗"][
-                        Math.floor(Math.random() * 4)
-                    ];
-                    heart.style.position = "fixed";
-                    heart.style.left = Math.random() * 100 + "%";
-                    heart.style.top = "-50px";
-                    heart.style.fontSize = Math.random() * 20 + 15 + "px";
-                    heart.style.pointerEvents = "none";
-                    heart.style.zIndex = "9994";
-                    heart.style.willChange = "transform, opacity";
-                    document.body.appendChild(heart);
-                    const duration =
-                        Math.random() *
-                            (ANIMATION_DURATIONS.heartRain.max -
-                                ANIMATION_DURATIONS.heartRain.min) +
-                        ANIMATION_DURATIONS.heartRain.min;
-                    heart.animate(
-                        [
+        if (Math.random() > (isMobile ? 0.7 : 0.8)) {
+            const count = isMobile ? HEART_RAIN_COUNT : 5;
+            for (let i = 0; i < count; i++) {
+                setTimeout(
+                    () => {
+                        const heart = document.createElement("div");
+                        heart.innerHTML = ["❤️", "💖", "💕", "💗"][
+                            Math.floor(Math.random() * 4)
+                        ];
+                        heart.style.position = "fixed";
+                        heart.style.left = Math.random() * 100 + "%";
+                        heart.style.top = "-50px";
+                        heart.style.fontSize = isMobile
+                            ? Math.random() * 12 + 12 + "px"
+                            : Math.random() * 20 + 15 + "px";
+                        heart.style.pointerEvents = "none";
+                        heart.style.zIndex = "9994";
+                        heart.style.willChange = "transform, opacity";
+                        document.body.appendChild(heart);
+                        const duration =
+                            Math.random() *
+                                (ANIMATION_DURATIONS.heartRain.max -
+                                    ANIMATION_DURATIONS.heartRain.min) +
+                            ANIMATION_DURATIONS.heartRain.min;
+                        heart.animate(
+                            [
+                                {
+                                    top: "-50px",
+                                    transform: "rotate(0deg)",
+                                    opacity: 1,
+                                },
+                                {
+                                    top: `${window.innerHeight + 50}px`,
+                                    transform: `rotate(${Math.random() * 360}deg)`,
+                                    opacity: 0,
+                                },
+                            ],
                             {
-                                top: "-50px",
-                                transform: "rotate(0deg)",
-                                opacity: 1,
+                                duration: duration * 1000,
+                                easing: "linear",
+                                fill: "forwards",
                             },
-                            {
-                                top: `${window.innerHeight + 50}px`,
-                                transform: `rotate(${Math.random() * 360}deg)`,
-                                opacity: 0,
-                            },
-                        ],
-                        {
-                            duration: duration * 1000,
-                            easing: "linear",
-                            fill: "forwards",
-                        },
-                    );
-                    setTimeout(() => {
-                        heart.remove();
-                    }, duration * 1000);
-                }, i * 100);
+                        );
+                        setTimeout(() => {
+                            heart.remove();
+                        }, duration * 1000);
+                    },
+                    i * (isMobile ? 150 : 100),
+                );
             }
         }
-    }, 2000);
+    }, interval);
 }
 
 function renderCompliments(complimentsArray = initialCompliments) {
@@ -307,41 +350,59 @@ function getRandomCompliments() {
 }
 
 function createGlitterExplosion(x, y) {
-    for (let i = 0; i < 30; i++) {
-        setTimeout(() => {
-            const glitter = document.createElement("div");
-            glitter.innerHTML = ["✨", "💖", "🌟", "💫"][
-                Math.floor(Math.random() * 4)
-            ];
-            glitter.style.position = "fixed";
-            glitter.style.left = x + "px";
-            glitter.style.top = y + "px";
-            glitter.style.fontSize = Math.random() * 20 + 10 + "px";
-            glitter.style.pointerEvents = "none";
-            glitter.style.zIndex = "10000";
-            const hue = Math.floor(Math.random() * 360);
-            glitter.style.textShadow = `0 0 8px hsl(${hue}, 100%, 70%)`;
-            document.body.appendChild(glitter);
-            const angle = (i / 30) * Math.PI * 2 + (Math.random() - 0.5) * 0.5;
-            const distance = Math.random() * 200 + 50;
-            glitter.animate(
-                [
-                    { transform: "translate(-50%, -50%) scale(0)", opacity: 1 },
+    const count = isMobile ? GLITTER_COUNT : 30;
+    const distance = isMobile ? 120 : 200;
+
+    for (let i = 0; i < count; i++) {
+        setTimeout(
+            () => {
+                const glitter = document.createElement("div");
+                glitter.innerHTML = ["✨", "💖", "🌟", "💫"][
+                    Math.floor(Math.random() * 4)
+                ];
+                glitter.style.position = "fixed";
+                glitter.style.left = x + "px";
+                glitter.style.top = y + "px";
+                glitter.style.fontSize = isMobile
+                    ? Math.random() * 12 + 8 + "px"
+                    : Math.random() * 20 + 10 + "px";
+                glitter.style.pointerEvents = "none";
+                glitter.style.zIndex = "10000";
+                if (isMobile) {
+                    glitter.style.willChange = "transform, opacity";
+                }
+                const hue = Math.floor(Math.random() * 360);
+                glitter.style.textShadow = `0 0 8px hsl(${hue}, 100%, 70%)`;
+                document.body.appendChild(glitter);
+                const angle =
+                    (i / count) * Math.PI * 2 + (Math.random() - 0.5) * 0.5;
+                const animDistance = Math.random() * distance + 50;
+                glitter.animate(
+                    [
+                        {
+                            transform: "translate(-50%, -50%) scale(0)",
+                            opacity: 1,
+                        },
+                        {
+                            transform: `translate(calc(-50% + ${Math.cos(angle) * animDistance}px), calc(-50% + ${Math.sin(angle) * animDistance}px)) scale(1)`,
+                            opacity: 0,
+                        },
+                    ],
                     {
-                        transform: `translate(calc(-50% + ${Math.cos(angle) * distance}px), calc(-50% + ${Math.sin(angle) * distance}px)) scale(1)`,
-                        opacity: 0,
+                        duration: isMobile ? 700 : 1000,
+                        easing: "cubic-bezier(0.19, 1, 0.22, 1)",
+                        fill: "forwards",
                     },
-                ],
-                {
-                    duration: 1000,
-                    easing: "cubic-bezier(0.19, 1, 0.22, 1)",
-                    fill: "forwards",
-                },
-            );
-            setTimeout(() => {
-                glitter.remove();
-            }, 1000);
-        }, i * 20);
+                );
+                setTimeout(
+                    () => {
+                        glitter.remove();
+                    },
+                    isMobile ? 700 : 1000,
+                );
+            },
+            i * (isMobile ? 30 : 20),
+        );
     }
 }
 
@@ -551,13 +612,64 @@ window.addEventListener("load", () => {
         .getElementById("modalClose")
         .addEventListener("click", closeLoveLetter);
 
-    floatingHeartInterval = setInterval(createFloatingHeart, 800);
-    heartRainInterval = setInterval(createHeartRain, 3000);
+    // Optimized intervals for mobile
+    const heartInterval = isMobile ? 1200 : 800;
+    const rainInterval = isMobile ? 5000 : 3000;
+
+    floatingHeartInterval = setInterval(createFloatingHeart, heartInterval);
+    heartRainInterval = setInterval(createHeartRain, rainInterval);
 });
+
+// Handle visibility change - pause animations when tab is hidden
+document.addEventListener("visibilitychange", () => {
+    if (document.hidden) {
+        clearInterval(floatingHeartInterval);
+        clearInterval(heartRainInterval);
+    } else {
+        floatingHeartInterval = setInterval(
+            createFloatingHeart,
+            isMobile ? 1200 : 800,
+        );
+        heartRainInterval = setInterval(
+            createHeartRain,
+            isMobile ? 5000 : 3000,
+        );
+    }
+});
+
+// Prevent zoom on double-tap for buttons
+if (isMobile) {
+    document.addEventListener(
+        "dblclick",
+        function (event) {
+            event.preventDefault();
+        },
+        { passive: false },
+    );
+
+    // Add touch feedback
+    document
+        .querySelectorAll(".magic-button, .secret-button, .kiss-button")
+        .forEach((button) => {
+            button.addEventListener(
+                "touchstart",
+                function () {
+                    this.style.transform = "scale(0.95)";
+                },
+                { passive: true },
+            );
+            button.addEventListener(
+                "touchend",
+                function () {
+                    this.style.transform = "";
+                },
+                { passive: true },
+            );
+        });
+}
 
 const style = document.createElement("style");
 style.textContent = `
     .card-ripple { position: absolute; border-radius: 50%; transform: translate(-50%, -50%); background: rgba(255,105,180,0.4); pointer-events: none; z-index: 0; }
 `;
 document.head.appendChild(style);
-
