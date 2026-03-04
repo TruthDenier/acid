@@ -115,7 +115,7 @@ function updateTimeTogether() {
     const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
     const timeElement = document.getElementById("timeTogether");
     if (timeElement)
-        timeElement.textContent = `Мы вместе: ${days} дней ${hours} часов ${minutes} минут 💖`;
+        timeElement.textContent = `Мы знакомы уже: ${days} дней ${hours} часов ${minutes} минут 💖`;
 
    
     document.getElementById("kissCount").textContent = kissCount;
@@ -569,3 +569,4 @@ style.textContent = `
     .card-ripple { position: absolute; border-radius: 50%; transform: translate(-50%, -50%); background: rgba(255,105,180,0.4); pointer-events: none; z-index: 0; }
 `;
 document.head.appendChild(style);
+
