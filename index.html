@@ -1,35 +1,69 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ru">
-<head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Для самой лучшей 💖</title>
-    <link rel="stylesheet" href="style.css" />
-</head>
-<body>
-    <main class="card">
-        <div class="header">
-            <div class="avatar">
-                <span class="avatar-heart">🐱</span>
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Для самой лучшей 💖</title>
+        <link rel="stylesheet" href="style.css" />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Caveat:wght@700&display=swap"
+            rel="stylesheet"
+        />
+    </head>
+    <body>
+        <main class="card">
+            <div class="header">
+                <div class="avatar">
+                    <span class="avatar-heart">🐱</span>
+                </div>
+                <h1 class="title">
+                    Даша
+                    <span class="title-heart">💖</span>
+                </h1>
+                <p class="subtitle">Для тебя 10 причин улыбнуться :</p>
             </div>
-            <h1 class="title">
-                Даша
-                <span class="title-heart">💖</span>
-            </h1>
-            <p class="subtitle">Для тебя 10 причин улыбнуться :</p>
+
+            <div class="time-together" id="timeTogether">
+                Мы знакомы уже: ...
+            </div>
+
+            <div class="compliments-grid" id="complimentsGrid"></div>
+
+            <div class="button-container">
+                <button class="magic-button" id="superMagicButton">
+                    <span>🐱</span> Нажми для чуда <span>💖</span>
+                </button>
+
+                <button class="kiss-button" id="kissButton">
+                    <span>💋</span> Поцелуй меня
+                </button>
+            </div>
+
+            <div class="love-letter-section">
+                <button class="secret-button" id="secretButton">
+                    <span>💌</span> Прочитать признание
+                </button>
+            </div>
+
+            <div class="kiss-counter" id="kissCounter">
+                💋 Поцелуев: <span id="kissCount">0</span>
+            </div>
+        </main>
+
+        <div class="modal-overlay" id="loveLetterModal">
+            <div class="modal-content">
+                <span class="modal-close" id="modalClose">&times;</span>
+                <div class="letter-content">
+                    <div class="letter-icon">💌</div>
+                    <h2 class="letter-title">Самой лучшей девочке 💕</h2>
+                    <p class="letter-text" id="randomLetter"></p>
+                    <div class="letter-sign">
+                        С любовью, твой особенный человек 💖
+                    </div>
+                </div>
+            </div>
         </div>
 
-        <div class="compliments-grid" id="complimentsGrid"></div>
-
-        <button class="magic-button" id="superMagicButton">
-            <span class="button-cat">🐱</span>
-            Нажми для чуда
-            <span class="button-heart">💖</span>
-        </button>
-
-        <div class="footer"></div>
-    </main>
-
-    <script src="script.js"></script>
-</body>
+        <script src="script.js"></script>
+    </body>
 </html>
