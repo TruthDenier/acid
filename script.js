@@ -45,7 +45,6 @@ const additionalCompliments = [
     { text: "Просто ты.", icon: "🤍" },
 ];
 
-
 const loveLetters = [
     "Каждый день с тобой — это самое ценное, что у меня есть. Ты делаешь мою жизнь яркой и наполненной смыслом.",
     "Я так счастлив, что ты есть рядом. С тобой я чувствую себя самым удачливым человеком на свете.",
@@ -56,7 +55,6 @@ const loveLetters = [
     "Твои глаза — моя любимая Вселенная. В них я могу смотреть вечно.",
     "Спасибо за то, что ты такая теплая, нежная и любимая. Ты — моё всё.",
     "Я не представляю свою жизнь без тебя. Ты — моя половинка, мой смысл, моя радость.",
-    "Люблю тебя больше всех на свете, больше слов, больше мыслей, больше всего на свете!",
 ];
 
 const colors = [
@@ -99,11 +97,9 @@ let heartRainInterval;
 let floatingHeartInterval;
 let fallingCatInterval;
 
-
 let kissCount = parseInt(localStorage.getItem("kissCount")) || 0;
 
 const initialCompliments = [...compliments];
-
 
 const startDate = new Date(2026, 1, 8, 12, 0);
 
@@ -117,7 +113,6 @@ function updateTimeTogether() {
     if (timeElement)
         timeElement.textContent = `Мы вместе: ${days} дней ${hours} часов ${minutes} минут 💖`;
 
-   
     document.getElementById("kissCount").textContent = kissCount;
 }
 
