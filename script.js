@@ -711,6 +711,15 @@ function closeLoveLetter() {
     modal.classList.remove("active");
 }
 
+function setupModalClose() {
+    const modal = document.getElementById("loveLetterModal");
+    modal.addEventListener("click", (e) => {
+        if (e.target === modal) {
+            closeLoveLetter();
+        }
+    });
+}
+
 function setupSuperMagicButton() {
     const button = document.getElementById("superMagicButton");
     button.addEventListener("click", (e) => {
@@ -751,6 +760,8 @@ window.addEventListener("load", () => {
     document
         .getElementById("modalClose")
         .addEventListener("click", closeLoveLetter);
+
+    setupModalClose();
 
     const heartInterval = isMobile ? 1200 : 800;
     const rainInterval = isMobile ? 5000 : 3000;
