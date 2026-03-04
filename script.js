@@ -67,7 +67,6 @@ const colors = [
     "#00FFFF",
 ];
 
-// Detect mobile device
 const isMobile =
     /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
         navigator.userAgent,
@@ -95,7 +94,6 @@ const ANIMATION_DELAYS = {
     heartSpawn: isMobile ? 300 : 150,
 };
 
-// Reduce elements on mobile for performance
 const MAX_FLOATING_HEARTS = isMobile ? 8 : 15;
 const MAX_FALLING_CATS = isMobile ? 3 : 8;
 const GLITTER_COUNT = isMobile ? 15 : 30;
@@ -149,11 +147,9 @@ function ensureContainers() {
 }
 
 function createFloatingHeart() {
-    // Limit hearts on mobile
     const heartsContainer = document.getElementById("floatingHearts");
     if (!heartsContainer) return;
 
-    // Check current heart count
     const currentHearts = heartsContainer.children.length;
     if (currentHearts >= MAX_FLOATING_HEARTS) return;
 
@@ -187,7 +183,7 @@ function createFloatingHeart() {
                 ANIMATION_DURATIONS.heartFloat.min) +
         ANIMATION_DURATIONS.heartFloat.min +
         "s";
-    // GPU acceleration for mobile
+
     if (isMobile) {
         heart.style.willChange = "transform, opacity";
         heart.style.transform = "translateZ(0)";
@@ -199,7 +195,6 @@ function createFloatingHeart() {
 }
 
 function createFallingCat() {
-    // Limit cats on mobile
     const catsContainer = document.getElementById("catsContainer");
     if (!catsContainer) return;
 
@@ -612,7 +607,6 @@ window.addEventListener("load", () => {
         .getElementById("modalClose")
         .addEventListener("click", closeLoveLetter);
 
-    // Optimized intervals for mobile
     const heartInterval = isMobile ? 1200 : 800;
     const rainInterval = isMobile ? 5000 : 3000;
 
@@ -620,7 +614,6 @@ window.addEventListener("load", () => {
     heartRainInterval = setInterval(createHeartRain, rainInterval);
 });
 
-// Handle visibility change - pause animations when tab is hidden
 document.addEventListener("visibilitychange", () => {
     if (document.hidden) {
         clearInterval(floatingHeartInterval);
@@ -637,7 +630,6 @@ document.addEventListener("visibilitychange", () => {
     }
 });
 
-// Prevent zoom on double-tap for buttons
 if (isMobile) {
     document.addEventListener(
         "dblclick",
@@ -647,7 +639,6 @@ if (isMobile) {
         { passive: false },
     );
 
-    // Add touch feedback
     document
         .querySelectorAll(".magic-button, .secret-button, .kiss-button")
         .forEach((button) => {

@@ -5,7 +5,6 @@
     -webkit-tap-highlight-color: transparent;
 }
 
-/* Prevent text selection on mobile */
 body {
     -webkit-user-select: none;
     -moz-user-select: none;
@@ -15,7 +14,6 @@ body {
     -webkit-overflow-scrolling: touch;
 }
 
-/* Prevent zoom on inputs and buttons on iOS */
 input,
 button,
 textarea,
@@ -476,7 +474,6 @@ body {
     margin-top: 15px;
 }
 
-/* ========== Mobile Optimization ========== */
 @media (max-width: 600px) {
     body {
         padding: 10px;
@@ -613,7 +610,6 @@ body {
         font-size: 14px;
     }
 
-    /* Pop-up text mobile */
     .pop-up-text.active {
         width: 90%;
         max-width: 300px;
@@ -624,7 +620,6 @@ body {
     }
 }
 
-/* Extra small screens (iPhone SE, older devices) */
 @media (max-width: 360px) {
     .card {
         padding: 15px 10px;
@@ -679,7 +674,6 @@ body {
     }
 }
 
-/* Touch device optimizations */
 @media (hover: none) and (pointer: coarse) {
     .card:hover {
         transform: none;
@@ -699,7 +693,6 @@ body {
         transform: none;
     }
 
-    /* Larger touch targets */
     .magic-button,
     .secret-button,
     .kiss-button,
@@ -709,7 +702,6 @@ body {
     }
 }
 
-/* Reduced motion for accessibility */
 @media (prefers-reduced-motion: reduce) {
     *,
     *::before,
@@ -726,7 +718,6 @@ body {
     }
 }
 
-/* Landscape orientation adjustments */
 @media (max-height: 500px) and (orientation: landscape) {
     .card {
         padding: 15px;
@@ -809,7 +800,6 @@ body {
     }
 }
 
-/* High DPI displays */
 @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
     .card {
         border-width: 1px;
