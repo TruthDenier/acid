@@ -33,21 +33,43 @@
                     <span>🐱</span> Нажми для чуда <span>💖</span>
                 </button>
 
+                <button class="hug-button" id="hugButton">
+                    <span>🤗</span> Обнять
+                </button>
+
                 <button class="kiss-button" id="kissButton">
                     <span>💋</span> Поцелуй меня
                 </button>
             </div>
 
-            <div class="love-letter-section">
+<div class="love-letter-section">
                 <button class="secret-button" id="secretButton">
                     <span>💌</span> Прочитать признание
                 </button>
             </div>
 
-            <div class="kiss-counter" id="kissCounter">
-                💋 Поцелуев: <span id="kissCount">0</span>
+            <div class="counters-container">
+                <div class="hug-counter" id="hugCounter">
+                    🤗 Объятия: <span id="hugCount">0</span>
+                </div>
+
+                <div class="kiss-counter" id="kissCounter">
+                    💋 Поцелуев: <span id="kissCount">0</span>
+                </div>
             </div>
         </main>
+
+        <!-- Pet the cat -->
+        <div class="pet-cat-container" id="petCatContainer">
+            <div class="pet-cat" id="petCat">
+                <span class="cat-face">😻</span>
+                <span class="cat-paws">
+                    <span class="paw left">🐾</span>
+                    <span class="paw right">🐾</span>
+                </span>
+            </div>
+            <div class="pet-hint">Погладь меня!</div>
+        </div>
 
         <div class="modal-overlay" id="loveLetterModal">
             <div class="modal-content">

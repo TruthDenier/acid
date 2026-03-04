@@ -14,6 +14,7 @@ const compliments = [
         icon: "🌸",
     },
     { text: "Твоя улыбка способна растопить самый холодный лёд.", icon: "😊" },
+    { text: "Твой голос журчит, как ручеёк весной.", icon: "🏞️" },
 ];
 
 const additionalCompliments = [
@@ -21,7 +22,7 @@ const additionalCompliments = [
         text: "Ты - моё самое заветное желание, воплощённое в жизнь.",
         icon: "🌠",
     },
-    { text: "Твой голос журчит, как ручеёк весной.", icon: "🏞️" },
+
     { text: "Рядом с тобой я чувствую себя самым счастливым.", icon: "💜" },
     { text: "Твоя доброта - это бескрайний океан.", icon: "🌊" },
     { text: "Ты - моё утешение и моя радость.", icon: "🕊️" },
@@ -104,6 +105,7 @@ let floatingHeartInterval;
 let fallingCatInterval;
 
 let kissCount = parseInt(localStorage.getItem("kissCount")) || 0;
+let hugCount = parseInt(localStorage.getItem("hugCount")) || 0;
 
 const initialCompliments = [...compliments];
 
@@ -401,10 +403,19 @@ function createGlitterExplosion(x, y) {
     }
 }
 
+let messageTimeout;
+
 function showMessage(message, isSpecial = false) {
     const msgDiv = document.getElementById("pop-up-text");
     const msgP = document.getElementById("pop-up-message");
     if (!msgDiv || !msgP) return;
+
+    if (messageTimeout) {
+        clearTimeout(messageTimeout);
+        msgDiv.classList.remove("active");
+        msgDiv.style.visibility = "hidden";
+    }
+
     msgP.innerHTML = message;
     msgDiv.style.visibility = "visible";
     msgDiv.style.pointerEvents = "auto";
@@ -556,6 +567,133 @@ function sendKiss() {
     showMessage("💋 Целую тебя крепко-крепко! 💋", true);
 }
 
+function sendHug() {
+    hugCount++;
+    document.getElementById("hugCount").textContent = hugCount;
+
+    localStorage.setItem("hugCount", hugCount);
+
+    const centerX = window.innerWidth / 2;
+    const centerY = window.innerHeight / 2;
+
+    for (let i = 0; i < 8; i++) {
+        setTimeout(() => {
+            const hug = document.createElement("div");
+            hug.innerHTML = ["🤗", "🫂", "💕", "🥰"][
+                Math.floor(Math.random() * 4)
+            ];
+            hug.style.position = "fixed";
+            hug.style.left = centerX + "px";
+            hug.style.top = centerY + "px";
+            hug.style.fontSize = "35px";
+            hug.style.pointerEvents = "none";
+            hug.style.zIndex = "10000";
+            document.body.appendChild(hug);
+
+            const angle = (i / 8) * Math.PI * 2;
+            const distance = 80 + Math.random() * 80;
+
+            hug.animate(
+                [
+                    { transform: "translate(-50%, -50%) scale(0)", opacity: 1 },
+                    {
+                        transform: `translate(calc(-50% + ${Math.cos(angle) * distance}px), calc(-50% + ${Math.sin(angle) * distance}px - 50px)) scale(1.2)`,
+                        opacity: 0,
+                    },
+                ],
+                { duration: 1200, easing: "ease-out", fill: "forwards" },
+            );
+
+            setTimeout(() => {
+                hug.remove();
+            }, 1200);
+        }, i * 80);
+    }
+
+    showMessage("🤗 Обнимаю тебя крепко-крепко! 🤗", true);
+}
+
+function setupPetCat() {
+    const petCat = document.getElementById("petCat");
+    if (!petCat) return;
+
+    let petCount = 0;
+    let isPurring = false;
+
+    const handlePet = (e) => {
+        e.preventDefault();
+        petCount++;
+
+        if (!isPurring) {
+            isPurring = true;
+            petCat.classList.add("purring");
+            setTimeout(() => {
+                petCat.classList.remove("purring");
+                isPurring = false;
+            }, 500);
+        }
+
+        const rect = petCat.getBoundingClientRect();
+        const x = rect.left + rect.width / 2;
+        const y = rect.top + rect.height / 2;
+
+        for (let i = 0; i < 5; i++) {
+            setTimeout(() => {
+                const heart = document.createElement("div");
+                heart.innerHTML = ["💖", "💕", "💗", "💞"][
+                    Math.floor(Math.random() * 4)
+                ];
+                heart.style.position = "fixed";
+                heart.style.left = x + "px";
+                heart.style.top = y + "px";
+                heart.style.fontSize = "20px";
+                heart.style.pointerEvents = "none";
+                heart.style.zIndex = "10000";
+                document.body.appendChild(heart);
+
+                const angle = Math.random() * Math.PI * 2;
+                const distance = 40 + Math.random() * 40;
+
+                heart.animate(
+                    [
+                        {
+                            transform: "translate(-50%, -50%) scale(0)",
+                            opacity: 1,
+                        },
+                        {
+                            transform: `translate(calc(-50% + ${Math.cos(angle) * distance}px), calc(-50% + ${Math.sin(angle) * distance}px)) scale(1)`,
+                            opacity: 0,
+                        },
+                    ],
+                    { duration: 800, easing: "ease-out", fill: "forwards" },
+                );
+
+                setTimeout(() => {
+                    heart.remove();
+                }, 800);
+            }, i * 50);
+        }
+
+        if (petCount % 3 === 0) {
+            const messages = [
+                "Мурчалка🥰",
+                "Такая милашка!💕",
+                "Ты самая лучшая!😻",
+                "Я хоть и котёнок, но ты все равно самая милая~🤗",
+                "Мяууу!😸",
+                "Погладь ещё~😽",
+            ];
+            showMessage(
+                messages[Math.floor(Math.random() * messages.length)],
+                true,
+            );
+        }
+    };
+
+    petCat.addEventListener("click", handlePet);
+    petCat.addEventListener("touchstart", handlePet, { passive: true });
+}
+
 function openLoveLetter() {
     const modal = document.getElementById("loveLetterModal");
     const letterText = document.getElementById("randomLetter");
@@ -589,6 +727,11 @@ function setupSuperMagicButton() {
         sendKiss();
     });
 
+    document.getElementById("hugButton").addEventListener("click", (e) => {
+        activateCommonAnimations(e);
+        sendHug();
+    });
+
     document.getElementById("secretButton").addEventListener("click", (e) => {
         activateCommonAnimations(e);
         openLoveLetter();
@@ -600,7 +743,9 @@ window.addEventListener("load", () => {
     renderCompliments();
     setupSuperMagicButton();
     setupMagneticButton();
+    setupPetCat();
     updateTimeTogether();
+    document.getElementById("hugCount").textContent = hugCount;
     setInterval(updateTimeTogether, 60000);
 
     document
@@ -640,7 +785,9 @@ if (isMobile) {
     );
 
     document
-        .querySelectorAll(".magic-button, .secret-button, .kiss-button")
+        .querySelectorAll(
+            ".magic-button, .secret-button, .kiss-button, .hug-button",
+        )
         .forEach((button) => {
             button.addEventListener(
                 "touchstart",
