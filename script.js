@@ -166,22 +166,18 @@ function showMarch8Celebration() {
 
     celebrationVideo = video;
     
-    video.src = "video.mp4";
+video.src = "video.mp4";
     video.volume = 0.35;
     video.style.opacity = "0";
     video.style.transition = "opacity 0.5s ease";
+    video.muted = true;
     
     video.play().then(() => {
         setTimeout(() => {
             video.style.opacity = "1";
         }, 100);
     }).catch(() => {
-        video.muted = true;
-        video.play().then(() => {
-            setTimeout(() => {
-                video.style.opacity = "1";
-            }, 100);
-        });
+        // Video not playing yet, will start with button
     });
     
     const texts = [
@@ -192,8 +188,16 @@ function showMarch8Celebration() {
     
     const randomText = texts[Math.floor(Math.random() * texts.length)];
     textElement.innerHTML = randomText;
-    celebration.classList.add("active");
+celebration.classList.add("active");
     createSparkles();
+    
+document.getElementById("celebrationSound").addEventListener("click", function() {
+        video.muted = false;
+        video.volume = 0.35;
+        video.style.opacity = "1";
+        video.play().catch(() => {});
+        this.style.display = "none";
+    });
 }
 
 function closeMarch8Celebration() {

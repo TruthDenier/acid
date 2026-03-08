@@ -416,6 +416,24 @@ body {
     visibility: visible !important;
 }
 
+.celebration-sound {
+    background: rgba(255, 255, 255, 0.9);
+    color: #ff69b4;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 20px;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 0 3px 15px rgba(0, 0, 0, 0.15);
+    margin-top: 10px;
+    z-index: 10000;
+}
+
+.celebration-sound:hover {
+    transform: scale(1.05);
+}
+
 .celebration-close:hover {
     transform: scale(1.05);
 }
