@@ -110,6 +110,7 @@ let hugCount = parseInt(localStorage.getItem("hugCount")) || 0;
 const initialCompliments = [...compliments];
 
 const startDate = new Date(2026, 1, 8, 12, 0);
+const datingStartDate = new Date(2026, 2, 7, 1, 0);
 
 function updateTimeTogether() {
     const now = new Date();
@@ -122,6 +123,109 @@ function updateTimeTogether() {
         timeElement.textContent = `Мы знакомы уже: ${days} дней ${hours} часов ${minutes} минут 💖`;
 
     document.getElementById("kissCount").textContent = kissCount;
+}
+
+function updateDatingTime() {
+    const now = new Date();
+    const diff = now - datingStartDate;
+
+    if (diff < 0) {
+        const datingElement = document.getElementById("datingTime");
+        if (datingElement)
+            datingElement.textContent = "Мы встречаемся: скоро... 💕";
+        return;
+    }
+
+    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+    const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+
+    const datingElement = document.getElementById("datingTime");
+    if (datingElement) {
+        datingElement.textContent = `Мы встречаемся: ${days}д ${hours}ч ${minutes}м ${seconds}с 💕`;
+    }
+}
+
+function checkMarch8() {
+    const now = new Date();
+    const month = now.getMonth();
+    const date = now.getDate();
+
+    if (month === 2 && date === 8) {
+        showMarch8Celebration();
+    }
+}
+
+let celebrationVideo = null;
+
+function showMarch8Celebration() {
+    const celebration = document.getElementById("march8Celebration");
+    const textElement = document.getElementById("celebrationText");
+    const video = document.getElementById("celebrationVideo");
+
+    celebrationVideo = video;
+    
+    video.src = "video.mp4";
+    video.volume = 0.35;
+    video.style.opacity = "0";
+    video.style.transition = "opacity 0.5s ease";
+    
+    video.play().then(() => {
+        setTimeout(() => {
+            video.style.opacity = "1";
+        }, 100);
+    }).catch(() => {
+        video.muted = true;
+        video.play().then(() => {
+            setTimeout(() => {
+                video.style.opacity = "1";
+            }, 100);
+        });
+    });
+    
+    const texts = [
+        "С 8 Марта, моя родная! 🌸<br>Ты самое прекрасное, что случилось в моей жизни. 💕",
+        "Дорогая моя, с праздником! 🌷<br>Ты лучшая! 💖",
+        "Поздравляю с 8 Марта, солнышко! 🌺<br>Ты украшаешь мою жизнь своей улыбкой.💗"
+    ];
+    
+    const randomText = texts[Math.floor(Math.random() * texts.length)];
+    textElement.innerHTML = randomText;
+    celebration.classList.add("active");
+    createSparkles();
+}
+
+function closeMarch8Celebration() {
+    const celebration = document.getElementById("march8Celebration");
+    const video = document.getElementById("celebrationVideo");
+    
+    video.style.opacity = "0";
+    
+    setTimeout(() => {
+        video.pause();
+        video.currentTime = 0;
+    }, 500);
+    
+    celebration.classList.remove("active");
+}
+
+function createSparkles() {
+    const container = document.getElementById("sparkles");
+    container.innerHTML = "";
+
+    const sparkles = ["🌸", "💐", "🌺", "💖", "✨", "⭐", "🌷", "🩷"];
+
+    for (let i = 0; i < 30; i++) {
+        const sparkle = document.createElement("div");
+        sparkle.className = "sparkle";
+        sparkle.textContent =
+            sparkles[Math.floor(Math.random() * sparkles.length)];
+        sparkle.style.left = Math.random() * 100 + "%";
+        sparkle.style.animationDelay = Math.random() * 3 + "s";
+        sparkle.style.fontSize = 20 + Math.random() * 20 + "px";
+        container.appendChild(sparkle);
+    }
 }
 
 function ensureContainers() {
@@ -754,14 +858,20 @@ window.addEventListener("load", () => {
     setupMagneticButton();
     setupPetCat();
     updateTimeTogether();
+    updateDatingTime();
     document.getElementById("hugCount").textContent = hugCount;
     setInterval(updateTimeTogether, 60000);
+    setInterval(updateDatingTime, 1000);
+
+    checkMarch8();
 
     document
         .getElementById("modalClose")
         .addEventListener("click", closeLoveLetter);
 
     setupModalClose();
+
+    document.getElementById("celebrationClose").addEventListener("click", closeMarch8Celebration);
 
     const heartInterval = isMobile ? 1200 : 800;
     const rainInterval = isMobile ? 5000 : 3000;

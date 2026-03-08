@@ -10,7 +10,7 @@
             rel="stylesheet"
         />
     </head>
-<body>
+    <body>
         <main class="card">
             <div class="header">
                 <div class="avatar">
@@ -24,6 +24,9 @@
             </div>
             <div class="time-together" id="timeTogether">
                 Мы знакомы уже: ...
+            </div>
+            <div class="time-together dating-time" id="datingTime">
+                Мы встречаемся: ...
             </div>
 
             <div class="compliments-grid" id="complimentsGrid"></div>
@@ -42,7 +45,7 @@
                 </button>
             </div>
 
-<div class="love-letter-section">
+            <div class="love-letter-section">
                 <button class="secret-button" id="secretButton">
                     <span>💌</span> Прочитать признание
                 </button>
@@ -59,7 +62,6 @@
             </div>
         </main>
 
-        <!-- Pet the cat -->
         <div class="pet-cat-container" id="petCatContainer">
             <div class="pet-cat" id="petCat">
                 <span class="cat-face">😻</span>
@@ -69,6 +71,26 @@
                 </span>
             </div>
             <div class="pet-hint">Погладь меня!</div>
+        </div>
+
+        <div class="march8-celebration" id="march8Celebration">
+<video
+                class="celebration-video"
+                id="celebrationVideo"
+                autoplay
+                loop
+                playsinline
+            ></video>
+            <div class="celebration-overlay"></div>
+            <div class="celebration-sparkles" id="sparkles"></div>
+            <div class="celebration-content">
+                <div class="celebration-hearts">💐🌸💐</div>
+                <h1 class="celebration-title">С 8 Марта! 💖</h1>
+                <p class="celebration-text" id="celebrationText"></p>
+                <button class="celebration-close" id="celebrationClose">
+                    Закрыть ✨
+                </button>
+            </div>
         </div>
 
         <div class="modal-overlay" id="loveLetterModal">
@@ -88,4 +110,3 @@
         <script src="script.js"></script>
     </body>
 </html>
-
