@@ -1,7 +1,3 @@
-/**
- * Три в ряд - Бонусы активируются при свайпе/клике
- */
-
 (function() {
     'use strict';
 
@@ -131,7 +127,6 @@
         }
     }
 
-    // Drag & Drop
     let dragStart = null;
     let touchStartEl = null;
 
@@ -170,7 +165,6 @@
         dragStart = null;
     });
 
-    // Touch
     document.addEventListener('touchstart', e => {
         const cell = e.target.closest('.game-cell');
         if (!cell || state.isAnimating) return;
@@ -206,7 +200,6 @@
         touchStartEl = null;
     });
 
-    // Клик для активации бонуса
     DOM.board?.addEventListener('click', e => {
         const cell = e.target.closest('.game-cell');
         if (!cell || state.isAnimating) return;
@@ -215,7 +208,6 @@
         const c = parseInt(cell.dataset.col);
         const gem = state.board[r]?.[c];
         
-        // Если это бонус - активируем по клику
         if (gem?.isBonus) {
             activateBonusAt(r, c);
         }
@@ -239,13 +231,11 @@
         
         state.isAnimating = true;
         
-        // Проверяем есть ли бонус в одной из клеток перед свайпом
         const gem1 = state.board[r][c];
         const gem2 = state.board[nr][nc];
         
         let bonusActivated = false;
         
-        // Активируем бонус если он есть в любой из клеток
         if (gem1?.isBonus) {
             activateBonusAt(r, c);
             bonusActivated = true;
@@ -255,10 +245,9 @@
         }
         
         if (bonusActivated) {
-            return; // Анимация уже запущена
+            return;
         }
         
-        // Обычный свайп
         swap(r, c, nr, nc);
         
         setTimeout(() => {
@@ -290,9 +279,7 @@
         const bonus = CONFIG.BONUSES[gem.bonusType];
         if (!bonus) return;
         
-        // Собираем все клетки для взрыва
         const toRemove = new Map();
-        const centerKey = `${r}-${c}`;
         
         for (let dr = -bonus.radius; dr <= bonus.radius; dr++) {
             for (let dc = -bonus.radius; dc <= bonus.radius; dc++) {
@@ -305,7 +292,6 @@
             }
         }
         
-        // Анимация и удаление
         toRemove.forEach((cell, key) => {
             const el = getCell(cell.r, cell.c);
             if (el) el.classList.add('matched');
