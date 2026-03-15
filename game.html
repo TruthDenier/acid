@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Три в ряд 💕</title>
+    <link rel="stylesheet" href="game.css">
+    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@700&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="game-container">
+        <header class="game-header">
+            <a href="index.html" class="back-btn">
+                <span class="back-icon">←</span>
+                <span>Назад</span>
+            </a>
+            <h1 class="game-title">Три в ряд</h1>
+            <div class="score-display">
+                <span class="score-label">Очки</span>
+                <span class="score-value" id="score">0</span>
+            </div>
+        </header>
+
+        <div class="game-stats">
+            <div class="stat-item">
+                <span class="stat-icon">🎯</span>
+                <span class="stat-label">Ходы</span>
+                <span class="stat-value" id="moves">0</span>
+            </div>
+            <div class="stat-item combo-stat" id="comboStat">
+                <span class="stat-icon">🔥</span>
+                <span class="stat-label">Комбо</span>
+                <span class="stat-value" id="combo">0</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-icon">⭐</span>
+                <span class="stat-label">Рекорд</span>
+                <span class="stat-value" id="highScore">0</span>
+            </div>
+        </div>
+
+        <div class="game-board-wrapper">
+            <div class="game-board" id="board"></div>
+            <div class="board-glow"></div>
+        </div>
+
+        <div class="game-instructions">
+            <p>Перетащи фигурки, чтобы собрать 3 одинаковых в ряд!</p>
+        </div>
+
+        <div class="game-controls">
+            <button class="control-btn" id="restartBtn">
+                <span>🔄</span> Заново
+            </button>
+        </div>
+    </div>
+
+    <div class="message-overlay" id="messageOverlay">
+        <div class="message-box" id="messageBox">
+            <div class="message-icon">💕</div>
+            <div class="message-text" id="messageText"></div>
+        </div>
+    </div>
+
+    <script src="game.js"></script>
+</body>
+</html>

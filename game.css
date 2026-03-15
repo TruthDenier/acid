@@ -1,0 +1,586 @@
+/* ========================================
+   CSS Variables & Reset
+======================================== */
+:root {
+    --primary-pink: #ff69b4;
+    --secondary-pink: #ff1493;
+    --light-pink: #ffb6c1;
+    --soft-pink: #ffe4ec;
+    --dark-bg: #1a0a1a;
+    --card-bg: rgba(255, 255, 255, 0.08);
+    --card-border: rgba(255, 255, 255, 0.15);
+    --shadow-pink: rgba(255, 105, 180, 0.4);
+    --glow-pink: rgba(255, 105, 180, 0.6);
+    --text-white: #ffffff;
+    --text-muted: rgba(255, 255, 255, 0.7);
+    --success-green: #4ade80;
+    --combo-orange: #fb923c;
+    
+    --cell-size: clamp(45px, 12vw, 60px);
+    --board-gap: 6px;
+    --border-radius: 16px;
+    --transition-smooth: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    min-height: 100vh;
+    background: linear-gradient(135deg, #0f0f23 0%, #1a0a1a 50%, #0d0510 100%);
+    font-family: 'Nunito', sans-serif;
+    color: var(--text-white);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    overflow-x: hidden;
+}
+
+/* Background Pattern */
+body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: 
+        radial-gradient(circle at 20% 80%, rgba(255, 105, 180, 0.1) 0%, transparent 50%),
+        radial-gradient(circle at 80% 20%, rgba(255, 105, 180, 0.1) 0%, transparent 50%);
+    pointer-events: none;
+    z-index: 0;
+}
+
+/* ========================================
+   Game Container
+======================================== */
+.game-container {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    max-width: 450px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+/* ========================================
+   Header
+======================================== */
+.game-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 20px;
+    background: linear-gradient(135deg, var(--primary-pink), var(--secondary-pink));
+    border-radius: var(--border-radius);
+    box-shadow: 0 8px 32px var(--shadow-pink);
+}
+
+.back-btn {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: white;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 14px;
+    padding: 8px 12px;
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.2);
+    transition: all 0.3s var(--transition-smooth);
+}
+
+.back-btn:hover {
+    background: rgba(255, 255, 255, 0.3);
+    transform: translateX(-3px);
+}
+
+.back-icon {
+    font-size: 18px;
+}
+
+.game-title {
+    font-family: 'Caveat', cursive;
+    font-size: 28px;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.score-display {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.2);
+    padding: 8px 16px;
+    border-radius: 12px;
+}
+
+.score-label {
+    font-size: 11px;
+    opacity: 0.9;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.score-value {
+    font-size: 24px;
+    font-weight: 700;
+}
+
+/* ========================================
+   Stats
+======================================== */
+.game-stats {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+}
+
+.stat-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    padding: 12px 20px;
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 14px;
+    flex: 1;
+    transition: all 0.3s var(--transition-smooth);
+}
+
+.stat-item.combo-stat.active {
+    background: linear-gradient(135deg, rgba(251, 146, 60, 0.3), rgba(251, 146, 60, 0.1));
+    border-color: var(--combo-orange);
+    animation: comboPulse 0.5s ease;
+}
+
+@keyframes comboPulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+}
+
+.stat-icon {
+    font-size: 20px;
+}
+
+.stat-label {
+    font-size: 11px;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.stat-value {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--light-pink);
+}
+
+/* ========================================
+   Game Board
+======================================== */
+.game-board-wrapper {
+    position: relative;
+    padding: 12px;
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 24px;
+}
+
+.board-glow {
+    position: absolute;
+    inset: -2px;
+    background: linear-gradient(135deg, var(--primary-pink), var(--secondary-pink));
+    border-radius: 26px;
+    opacity: 0.3;
+    filter: blur(10px);
+    z-index: -1;
+}
+
+.game-board {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: var(--board-gap);
+    aspect-ratio: 1;
+}
+
+/* ========================================
+   Game Cell
+======================================== */
+.game-cell {
+    aspect-ratio: 1;
+    background: linear-gradient(145deg, rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0.05));
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: clamp(24px, 7vw, 32px);
+    cursor: grab;
+    user-select: none;
+    transition: all 0.25s var(--transition-smooth);
+    position: relative;
+    box-shadow: 
+        inset 0 2px 4px rgba(255, 255, 255, 0.1),
+        0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.game-cell:hover {
+    transform: scale(1.08);
+    background: linear-gradient(145deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.1));
+    box-shadow: 
+        inset 0 2px 4px rgba(255, 255, 255, 0.2),
+        0 4px 16px var(--shadow-pink);
+    z-index: 2;
+}
+
+.game-cell:active {
+    cursor: grabbing;
+}
+
+.game-cell.dragging {
+    opacity: 0.5;
+    transform: scale(1.1);
+    z-index: 100;
+}
+
+.game-cell.drag-over {
+    background: rgba(255, 105, 180, 0.4);
+    transform: scale(1.1);
+    box-shadow: 0 0 20px var(--glow-pink);
+}
+
+.game-cell.selected {
+    background: linear-gradient(145deg, rgba(255, 215, 0, 0.3), rgba(255, 215, 0, 0.15));
+    box-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+    animation: selectedPulse 1s ease infinite;
+}
+
+@keyframes selectedPulse {
+    0%, 100% { box-shadow: 0 0 15px rgba(255, 215, 0, 0.4); }
+    50% { box-shadow: 0 0 25px rgba(255, 215, 0, 0.7); }
+}
+
+.game-cell.matched {
+    animation: matchPop 0.35s ease-out forwards;
+    pointer-events: none;
+}
+
+@keyframes matchPop {
+    0% { 
+        transform: scale(1); 
+        opacity: 1;
+    }
+    50% { 
+        transform: scale(1.2); 
+        opacity: 0.8;
+    }
+    100% { 
+        transform: scale(0.3); 
+        opacity: 0;
+    }
+}
+
+.game-cell.drop {
+    animation: dropIn 0.4s var(--transition-smooth);
+}
+
+@keyframes dropIn {
+    0% { 
+        transform: translateY(-50px) scale(0.5); 
+        opacity: 0;
+    }
+    60% { 
+        transform: translateY(5px) scale(1.05); 
+        opacity: 1;
+    }
+    100% { 
+        transform: translateY(0) scale(1); 
+        opacity: 1;
+    }
+}
+
+.game-cell.swap {
+    transition: transform 0.3s var(--transition-smooth);
+}
+
+.game-cell.invalid-swap {
+    animation: shake 0.4s ease;
+}
+
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    20% { transform: translateX(-8px); }
+    40% { transform: translateX(8px); }
+    60% { transform: translateX(-5px); }
+    80% { transform: translateX(5px); }
+}
+
+.game-cell.hint {
+    animation: hintGlow 1s ease-in-out infinite;
+}
+
+@keyframes hintGlow {
+    0%, 100% { 
+        box-shadow: 0 0 10px var(--glow-pink);
+        transform: scale(1); 
+    }
+    50% { 
+        box-shadow: 0 0 25px var(--glow-pink), 0 0 40px var(--glow-pink);
+        transform: scale(1.1); 
+    }
+}
+
+/* ========================================
+   Bonus Cells
+======================================== */
+.game-cell.bonus-cell {
+    background: linear-gradient(145deg, rgba(255, 255, 255, 0.25), rgba(255, 255, 255, 0.1));
+    box-shadow: 
+        inset 0 2px 4px rgba(255, 255, 255, 0.3),
+        0 0 15px rgba(255, 215, 0, 0.5);
+    animation: bonusGlow 1.5s ease-in-out infinite;
+}
+
+.game-cell.bonus-bomb {
+    background: linear-gradient(145deg, rgba(239, 68, 68, 0.3), rgba(239, 68, 68, 0.1));
+    box-shadow: 
+        inset 0 2px 4px rgba(255, 255, 255, 0.3),
+        0 0 20px rgba(239, 68, 68, 0.6);
+    animation: bombPulse 0.8s ease-in-out infinite;
+}
+
+.game-cell.bonus-rocket {
+    background: linear-gradient(145deg, rgba(249, 115, 22, 0.3), rgba(249, 115, 22, 0.1));
+    box-shadow: 
+        inset 0 2px 4px rgba(255, 255, 255, 0.3),
+        0 0 20px rgba(249, 115, 22, 0.6);
+    animation: rocketGlow 1s ease-in-out infinite;
+}
+
+.game-cell.bonus-super {
+    background: linear-gradient(145deg, rgba(234, 179, 8, 0.4), rgba(234, 179, 8, 0.15));
+    box-shadow: 
+        inset 0 2px 4px rgba(255, 255, 255, 0.4),
+        0 0 25px rgba(234, 179, 8, 0.8);
+    animation: superGlow 0.6s ease-in-out infinite;
+}
+
+@keyframes bonusGlow {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+}
+
+@keyframes bombPulse {
+    0%, 100% { 
+        transform: scale(1); 
+        box-shadow: 0 0 15px rgba(239, 68, 68, 0.5);
+    }
+    50% { 
+        transform: scale(1.08); 
+        box-shadow: 0 0 25px rgba(239, 68, 68, 0.8);
+    }
+}
+
+@keyframes rocketGlow {
+    0%, 100% { 
+        transform: scale(1); 
+        box-shadow: 0 0 15px rgba(249, 115, 22, 0.5);
+    }
+    50% { 
+        transform: scale(1.1); 
+        box-shadow: 0 0 30px rgba(249, 115, 22, 0.9);
+    }
+}
+
+@keyframes superGlow {
+    0%, 100% { 
+        transform: scale(1); 
+        box-shadow: 0 0 20px rgba(234, 179, 8, 0.6);
+    }
+    50% { 
+        transform: scale(1.12); 
+        box-shadow: 0 0 35px rgba(234, 179, 8, 1), 0 0 50px rgba(234, 179, 8, 0.5);
+    }
+}
+
+/* ========================================
+   Instructions
+======================================== */
+.game-instructions {
+    text-align: center;
+    padding: 12px;
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 14px;
+}
+
+.game-instructions p {
+    color: var(--text-muted);
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+/* ========================================
+   Controls
+======================================== */
+.game-controls {
+    display: flex;
+    justify-content: center;
+}
+
+.control-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 14px 28px;
+    background: linear-gradient(135deg, var(--light-pink), var(--primary-pink));
+    border: none;
+    border-radius: 50px;
+    color: white;
+    font-family: 'Nunito', sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s var(--transition-smooth);
+    box-shadow: 0 4px 20px var(--shadow-pink);
+}
+
+.control-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 30px var(--shadow-pink);
+}
+
+.control-btn:active {
+    transform: translateY(0);
+}
+
+/* ========================================
+   Message Overlay - Ненавязчивые уведомления
+======================================== */
+.message-overlay {
+    position: fixed;
+    inset: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    pointer-events: none;
+    z-index: 1000;
+    opacity: 0;
+    transition: opacity 0.4s ease;
+}
+
+.message-overlay.show {
+    opacity: 1;
+    pointer-events: none;
+}
+
+.message-box {
+    background: rgba(30, 30, 50, 0.85);
+    backdrop-filter: blur(10px);
+    padding: 16px 32px;
+    border-radius: 16px;
+    text-align: center;
+    transform: scale(0.9);
+    transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.message-overlay.show .message-box {
+    transform: scale(1);
+}
+
+.message-icon {
+    font-size: 32px;
+    margin-bottom: 8px;
+}
+
+.message-text {
+    font-size: 16px;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.9);
+}
+
+/* ========================================
+   Responsive
+======================================== */
+@media (max-width: 480px) {
+    body {
+        padding: 12px;
+    }
+    
+    .game-header {
+        padding: 12px 14px;
+    }
+    
+    .game-title {
+        font-size: 22px;
+    }
+    
+    .score-display {
+        padding: 6px 12px;
+    }
+    
+    .score-value {
+        font-size: 20px;
+    }
+    
+    .stat-item {
+        padding: 10px 12px;
+    }
+    
+    .game-board-wrapper {
+        padding: 8px;
+    }
+    
+    .game-cell {
+        border-radius: 10px;
+        font-size: clamp(20px, 6vw, 26px);
+    }
+}
+
+@media (max-height: 700px) and (orientation: landscape) {
+    .game-container {
+        max-width: 400px;
+        gap: 12px;
+    }
+    
+    .game-header {
+        padding: 10px 14px;
+    }
+    
+    .game-stats {
+        gap: 10px;
+    }
+    
+    .stat-item {
+        padding: 8px 12px;
+    }
+}
+
+/* ========================================
+   Animations
+======================================== */
+@keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-5px); }
+}
+
+@keyframes glow {
+    0%, 100% { opacity: 0.3; }
+    50% { opacity: 0.5; }
+}
+
+/* Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
